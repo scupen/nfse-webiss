@@ -18,31 +18,19 @@ O sistema WebISS implementa o modelo 1.0 de NFs-e conforme modelo proposto pela 
 
 ## Como usar
 
-### Preparando os arquivos do certificado digital
-
-Os emissores de certificados digitais entregam arquivos .p12 ou .pfx quando é emitido um novo certificado tipo A1, precisamos também do formato .pem deles para utilizar na conexão. Os comandos abaixo resolvem o problema.
-
-```bash
-
-$ openssl pkcs12 -in certificate.pfx -nokeys -out certificate.pem
-$ openssl pkcs12 -in certificate.pfx -nocerts -out key.pem -nodes
-
-```
-
-
 ### Instanciando o Gateway
 
-As chamadas ao WebService acontece através dos métodos do gateway de conexão que é instanciado com os parâmetros dos certificados e url WSDL da prefeitura em questão.
+As chamadas ao WebService acontece através dos métodos do gateway de conexão que é instanciado com os parâmetros do certificado e url do WSDL da prefeitura em questão.
 
 ```ruby
 
 gateway = NfseWebiss::Gateway.new(
 	# arquivos .p12 ou .pfx possuem o mesmo funcionamento
-	ssl_cert_p12_path: 'path/to/certificate.pfx',
-	ssl_cert_path: 'path/to/certificate.pem',
-	ssl_key_path: 'path/to/key.pem',
+	ssl_cert_path: 'path/do/certificado.pfx',
 	ssl_cert_pass: 'SENHA',
-	# url WebISS da prefeitura em questão e ambiente (produção ou homologação)
+	# também pode-se passar diretamente o objeto do certificado, se você estiver utilizando ele fora do gateway
+	ssl_cert: OpenSSL::PKCS12.new(File.read('path/do/certificado.pfx'), 'SENHA'),
+	# url do webservice WebISS da prefeitura em questão e ambiente (produção ou homologação)
 	wsdl: 'https://www1.webiss.com.br/rjnovafriburgo_wsnfse_homolog/nfseservices.svc?wsdl'
 )
 

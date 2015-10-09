@@ -21,7 +21,7 @@ module NfseWebiss
       operation = savon_client.operation('NfseServices', 'BasicHttpBinding_INfseServices', method)
       operation.xml_envelope = XmlBuilder.new.xml_for(method, data, certificate)
       Response.new(method, operation.call)
-    rescue Savon::Error
+    # rescue Savon::Error
     end
 
     def savon_client

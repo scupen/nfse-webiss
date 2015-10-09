@@ -1,35 +1,48 @@
 module NfseWebiss
-  class Response
-    
+  class Response  
     def initialize(method, savon_response)
       @method = method
       @savon_response = savon_response
-      @retorno = nori.parse(savon_response.hash[:envelope][:body]["#{method}Response".snakecase.to_sym]["#{method}Result".snakecase.to_sym])["#{METHODS[method]}Resposta".snakecase.to_sym]
+      @retorno = parse_response
     end
 
     attr_reader :method, :savon_response, :retorno
 
-    def success?
-      !!retorno[:cabecalho][:sucesso]
+    def sucesso?
+      !retorno[:fault] && !retorno[:mensagem_retorno]
     end
 
-    def errors
-      return unless !success?
-      retorno[:alerta] || retorno[:erro]
+    def erros
+      return if sucesso?
+      retorno[:fault] || retorno[:mensagem_retorno]
+    end
+
+    def [](key)
+      retorno[key]
     end
 
     private
+
+    def parse_response
+      body = savon_response.hash[:envelope][:body]
+      response, result, resposta = %W(#{method}Response #{method}Result #{METHODS[method]}Resposta).map(&:snakecase).map(&:to_sym)
+      if body[response]
+        parsed = nori.parse(body[response][result])[resposta]
+        parsed[:lista_mensagem_retorno] || parsed
+      else
+        body
+      end
+    end
 
     def nori
       return @nori if @nori
 
       nori_options = {
         strip_namespaces: true,
-        convert_tags_to: lambda { |tag| tag.snakecase.to_sym }
+        convert_tags_to: ->(tag) { tag.snakecase.to_sym }
       }
 
       @nori = Nori.new(nori_options)
     end
-
   end
 end

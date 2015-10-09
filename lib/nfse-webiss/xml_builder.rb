@@ -1,6 +1,5 @@
 module NfseWebiss
   class XmlBuilder
-
     def xml_for(method, data, certificado)
       # assinar(xml(method, data, certificado), certificado)
       %Q{ 
@@ -63,7 +62,7 @@ module NfseWebiss
           # xml.Assinatura assinatura_envio_rps(data, certificado)
           # chave_rps_to_xml(xml, data)
           identificacao_rps(xml, data)
-          xml.DataEmissao ( data[:datahora_emissao].is_a?(String) ? data[:datahora_emissao] : data[:datahora_emissao].strftime('%FT%T'))
+          xml.DataEmissao ( data[:data_emissao].is_a?(String) ? data[:data_emissao] : data[:data_emissao].strftime('%FT%T'))
           xml.NaturezaOperacao data[:natureza_operacao]
           xml.RegimeEspecialTributacao data[:regime_especial_tributacao] if data[:regime_especial_tributacao]
           xml.OptanteSimplesNacional data[:optante_simples_nacional]
@@ -111,15 +110,15 @@ module NfseWebiss
             xml.Endereco {
               xml.Endereco data[:tomador_endereco]
               xml.Numero data[:tomador_numero]
-              xml.Complemento data[:tomador_complemento]
+              xml.Complemento data[:tomador_complemento] if data[:tomador_complemento]
               xml.Bairro data[:tomador_bairro]
               xml.CodigoMunicipio data[:tomador_codigo_municipio]
               xml.Uf data[:tomador_uf]
               xml.Cep data[:tomador_cep]
             }
             xml.Contato {
-              xml.Telefone data[:tomador_telefone]
-              xml.Email data[:tomador_email]
+              xml.Telefone data[:tomador_telefone] if data[:tomador_telefone]
+              xml.Email data[:tomador_email] if data[:tomador_email]
             }
           }
         }
@@ -295,6 +294,5 @@ module NfseWebiss
       sign_hash = certificado.key.sign( OpenSSL::Digest::SHA1.new, value )
       Base64.encode64( sign_hash ).gsub("\n",'').gsub("\r",'').strip()
     end
-
   end
 end

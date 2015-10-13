@@ -6,7 +6,6 @@
 # require "savon"
 
 module NfseWebiss
-
   METHODS = {
     'RecepcionarLoteRps' => 'EnviarLoteRps',
     'ConsultarSituacaoLoteRps' => 'ConsultarSituacaoLoteRps',
@@ -19,6 +18,5 @@ module NfseWebiss
   autoload :Version, 'nfse-webiss/version'
   autoload :XmlBuilder, 'nfse-webiss/xml_builder'
   autoload :Response, 'nfse-webiss/response'
-  autoload :Gateway, 'nfse-webiss/Gateway'
-
+  autoload :Gateway, 'nfse-webiss/gateway'
 end

@@ -27,7 +27,7 @@ module NfseWebiss
       body = savon_response.hash[:envelope][:body]
       response, result, resposta = %W(#{method}Response #{method}Result #{METHODS[method]}Resposta).map(&:snakecase).map(&:to_sym)
       if body[response]
-        parsed = nori.parse(body[response][result])[resposta].gsub('&', '&amp;') # TODO: arrumar esse gsub
+        parsed = nori.parse(body[response][result].gsub('&', '&amp;'))[resposta] # TODO: arrumar esse gsub
         parsed[:lista_mensagem_retorno] || parsed
       else
         body

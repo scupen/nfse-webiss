@@ -157,8 +157,8 @@ module NfseWebiss
           xml.IdentificacaoNfse {
             xml.Numero data[:numero_nfse]
             xml.Cnpj data[:cnpj]
-            xml.InscricaoMunicipal if data[:inscricao_municipal]
-            xml.CodigoMunicipio if data[:codigo_municipio]
+            xml.InscricaoMunicipal data[:inscricao_municipal] if data[:inscricao_municipal]
+            xml.CodigoMunicipio data[:codigo_municipio] if data[:codigo_municipio]
           }
           xml.CodigoCancelamento data[:codigo_cancelamento]
         }

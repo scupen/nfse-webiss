@@ -62,7 +62,7 @@ module NfseWebiss
           # xml.Assinatura assinatura_envio_rps(data, certificado)
           # chave_rps_to_xml(xml, data)
           identificacao_rps(xml, data)
-          xml.DataEmissao ( data[:data_emissao].is_a?(String) ? data[:data_emissao] : data[:data_emissao].strftime('%FT%T'))
+          xml.DataEmissao(data[:data_emissao].is_a?(String) ? data[:data_emissao] : data[:data_emissao].strftime('%FT%T'))
           xml.NaturezaOperacao data[:natureza_operacao]
           xml.RegimeEspecialTributacao data[:regime_especial_tributacao] if data[:regime_especial_tributacao]
           xml.OptanteSimplesNacional data[:optante_simples_nacional]
@@ -103,8 +103,8 @@ module NfseWebiss
             xml.IdentificacaoTomador {
               xml.CpfCnpj {
                 xml.send((data[:tomador_cpf_cnpj].length == 14 ? 'Cnpj' : 'Cpf'), data[:tomador_cpf_cnpj])
-                xml.InscricaoMunicipal data[:tomador_inscricao_municipal] if data[:tomador_inscricao_municipal]
-              }
+              } if data[:tomador_cpf_cnpj]
+              xml.InscricaoMunicipal data[:tomador_inscricao_municipal] if data[:tomador_inscricao_municipal]
             }
             xml.RazaoSocial data[:tomador_razao_social]
             xml.Endereco {
@@ -137,13 +137,17 @@ module NfseWebiss
 
     def consultar_nfse(xml, data, certificado)
       identificacao_prestador(xml, data)
-      xml.NumeroNfse data[:numero_nfse]
+      xml.NumeroNfse data[:numero_nfse] if data[:numero_nfse]
       xml.PeriodoEmissao {
-        xml.DataInicial 'YYYY-MM-DD'
-        xml.DataFinal 'YYYY-MM-DD'
-      }
-      # Tomador
-      # IntermediarioServico
+        xml.DataInicial(data[:data_inicial].is_a?(String) ? data[:data_inicial] : data[:data_inicial].strftime('%Y-%m-%d'))
+        xml.DataFinal(data[:data_final].is_a?(String) ? data[:data_final] : data[:data_final].strftime('%Y-%m-%d'))
+      } if data[:data_inicial] && data[:data_final]
+      xml.Tomador {
+        xml.CpfCnpj {
+          xml.send((data[:tomador_cpf_cnpj].length == 14 ? 'Cnpj' : 'Cpf'), data[:tomador_cpf_cnpj])
+        } if data[:tomador_cpf_cnpj]
+        xml.InscricaoMunicipal data[:tomador_inscricao_municipal] if data[:tomador_inscricao_municipal]
+      } if data[:tomador_cpf_cnpj] || data[:tomador_inscricao_municipal]
     end
 
     def consultar_lote_rps(xml, data, certificado)

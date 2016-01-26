@@ -1,20 +1,15 @@
 module NfseWebiss
-  class Response  
-    def initialize(method, savon_response)
+  class Response
+    def initialize(method, tag, savon_response)
       @method = method
+      @tag = tag
       @savon_response = savon_response
-      @retorno = parse_response
     end
 
-    attr_reader :method, :savon_response, :retorno
+    attr_reader :method, :tag, :savon_response, :xml
 
-    def sucesso?
-      !retorno[:fault] && !retorno[:mensagem_retorno]
-    end
-
-    def erros
-      return if sucesso?
-      retorno[:fault] || retorno[:mensagem_retorno]
+    def retorno
+      @retorno ||= parse_response
     end
 
     def [](key)
@@ -25,10 +20,11 @@ module NfseWebiss
 
     def parse_response
       body = savon_response.hash[:envelope][:body]
-      response, result, resposta = %W(#{method}Response #{method}Result #{METHODS[method]}Resposta).map(&:snakecase).map(&:to_sym)
+      response, result, resposta = %W(#{method}Response #{method}Return #{tag}Resposta).map(&:snakecase).map(&:to_sym)
       if body[response]
-        parsed = nori.parse(body[response][result].gsub('&', '&amp;'))[resposta] # TODO: arrumar esse gsub
-        parsed[:lista_mensagem_retorno] || parsed
+        @xml = body[response][result].gsub('&', '&amp;') # TODO: arrumar esse gsub
+        parsed = nori.parse(xml)
+        parsed[resposta] || parsed
       else
         body
       end

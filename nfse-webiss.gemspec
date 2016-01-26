@@ -15,7 +15,8 @@ Gem::Specification.new do |gem|
   gem.files         = `git ls-files`.split("\n")
   gem.require_paths = ['lib']
 
-  gem.add_dependency 'nokogiri' #, '1.5.9'
-  gem.add_dependency 'savon'#, '2.3.0'
+  gem.add_dependency 'nokogiri'
+  gem.add_dependency 'savon'
   gem.add_dependency 'signer'
+  gem.add_dependency 'haml'
 end

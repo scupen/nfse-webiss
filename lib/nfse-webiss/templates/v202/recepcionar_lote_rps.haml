@@ -1,0 +1,9 @@
+%LoteRps{ Id: numero_lote, versao: 2.02 }
+  %NumeroLote= numero_lote
+  %CpfCnpj
+    %Cnpj= cnpj
+  %InscricaoMunicipal= inscricao_municipal
+  %QuantidadeRps= lote_rps.size
+  %ListaRps
+    - lote_rps.each do |rps|
+      = partial('rps', rps)

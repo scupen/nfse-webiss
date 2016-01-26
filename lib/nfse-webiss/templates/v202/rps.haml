@@ -1,0 +1,96 @@
+%Rps
+  %InfDeclaracaoPrestacaoServico{ Id: numero }
+    %Rps{ Id: numero }
+      %IdentificacaoRps
+        %Numero= numero
+        %Serie= serie
+        %Tipo= tipo
+
+      %DataEmissao= data_emissao.is_a?(String) ? data_emissao : data_emissao.strftime('%F')
+      %Status= status
+
+    %Competencia= data_emissao.is_a?(String) ? data_emissao : data_emissao.strftime('%F')
+
+    %Servico
+      %Valores
+        - if valor_servicos
+          %ValorServicos= valor_servicos.round(2)
+        - if valor_deducoes
+          %ValorDeducoes= valor_deducoes.round(2)
+        - if valor_pis
+          %ValorPis= valor_pis.round(2)
+        - if valor_cofins
+          %ValorCofins= valor_cofins.round(2)
+        - if valor_inss
+          %ValorInss= valor_inss.round(2)
+        - if valor_ir
+          %ValorIr= valor_ir.round(2)
+        - if valor_csll
+          %ValorCsll= valor_csll.round(2)
+        - if valor_iss
+          %ValorIss= valor_iss.round(2)
+        - if outras_retencoes
+          %OutrasRetencoes= outras_retencoes.round(2)
+        - if aliquota
+          %Aliquota= aliquota.round(2)
+        - if desconto_incondicionado
+          %DescontoIncondicionado= desconto_incondicionado.round(2)
+        - if desconto_condicionado
+          %DescontoCondicionado= desconto_condicionado.round(2)
+
+      %IssRetido= iss_retido
+      - if iss_retido.to_i == 1
+        %ResponsavelRetencao= 1
+      %ItemListaServico= item_lista_servico
+      - if codigo_cnae
+        %CodigoCnae= codigo_cnae
+      - if codigo_tributacao_municipio
+        %CodigoTributacaoMunicipio= codigo_tributacao_municipio
+      %Discriminacao= discriminacao
+      %CodigoMunicipio= codigo_municipio
+      / %CodigoPais=
+      %ExigibilidadeISS= 1
+      %MunicipioIncidencia= codigo_municipio
+
+    %Prestador
+      %CpfCnpj
+        %Cnpj= cnpj
+      %InscricaoMunicipal= inscricao_municipal
+
+    %Tomador
+      %IdentificacaoTomador
+        %CpfCnpj
+          - if tomador_cpf_cnpj.length == 14
+            %Cnpj= tomador_cpf_cnpj
+          - else
+            %Cpf= tomador_cpf_cnpj
+        - if tomador_inscricao_municipal
+          %InscricaoMunicipal= tomador_inscricao_municipal
+
+      %RazaoSocial= tomador_razao_social
+      %Endereco
+        - if tomador_endereco
+          %Endereco= tomador_endereco
+        - if tomador_numero
+          %Numero= tomador_numero
+        / - if tomador_complemento
+        /   %Complemento= tomador_complemento
+        - if tomador_bairro
+          %Bairro= tomador_bairro
+        - if tomador_codigo_municipio
+          %CodigoMunicipio= tomador_codigo_municipio
+        - if tomador_uf
+          %Uf= tomador_uf
+        - if tomador_cep
+          %Cep= tomador_cep
+
+      %Contato
+        - if tomador_telefone
+          %Telefone= tomador_telefone
+        - if tomador_email
+          %Email= tomador_email
+
+    - if regime_especial_tributacao
+      %RegimeEspecialTributacao= regime_especial_tributacao
+    %OptanteSimplesNacional= optante_simples_nacional
+    %IncentivoFiscal= incentivador_cultural

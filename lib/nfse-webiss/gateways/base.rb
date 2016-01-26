@@ -52,16 +52,10 @@ module NfseWebiss
         service, port = soap_service
         operation = savon_client.operation(service, port, method)
         msg = render_xml('base', data.merge(template: method.underscore, tag: "#{methods[method]}Envio"))
-        # puts "-----------------------------------------------------"
-        # puts msg
-        # puts "-----------------------------------------------------"
         operation.encoding = 'iso-8859-1'
-        # puts msg.force_encoding("iso-8859-1")
-        operation.xml_envelope = build_envelope(method, msg) #.encode('iso-8859-1', 'utf-8')
-        # puts operation.xml_envelope
-
-        # operation.endpoint = 'https://sis-nfs-e.pmnf.rj.gov.br/nfe/webservices/NFEServices.jws'
-        # puts operation.example_body
+        operation.xml_envelope = build_envelope(method, msg)
+        # WebService errado tem que forçar isso... =/
+        operation.endpoint.gsub!('http://', 'https://')
         Response.new(method, methods[method], operation.call)
       # rescue Savon::Error
       end
@@ -76,7 +70,7 @@ module NfseWebiss
         client.client.receive_timeout = 0
         client.client.ssl_config.client_cert = certificate.certificate
         client.client.ssl_config.client_key = certificate.key
-        # client.client.ssl_config.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        client.client.ssl_config.verify_mode = OpenSSL::SSL::VERIFY_NONE
         client
       end
     end

@@ -55,7 +55,7 @@ module NfseWebiss
         operation.encoding = 'iso-8859-1'
         operation.xml_envelope = build_envelope(method, msg)
         # WebService errado tem que forçar isso... =/
-        operation.endpoint.gsub!('http://', 'https://')
+        operation.endpoint.gsub!('http://', 'https://') if @options[:wsdl].include?('https://')
         Response.new(method, methods[method], operation.call)
       # rescue Savon::Error
       end

@@ -12,14 +12,14 @@ module NfseWebiss
         {
           'RecepcionarLoteRps' => 'EnviarLoteRps',
           'RecepcionarLoteRpsSincrono' => 'EnviarLoteRpsSincrono',
-          'GerarNfse' => '',
+          'GerarNfse' => 'GerarNfse',
           'CancelarNfse' => 'CancelarNfse',
-          'SubstituirNfse' => '',
+          'SubstituirNfse' => 'SubstituirNfse',
           'ConsultarLoteRps' => 'ConsultarLoteRps',
           'ConsultarNfsePorRps' => 'ConsultarNfseRps',
-          'ConsultarNfseServicoPrestado' => '',
-          'ConsultarNfseServicoTomado' => '',
-          'ConsultarNfsePorFaixa' => ''
+          'ConsultarNfseServicoPrestado' => 'ConsultarNfse',
+          'ConsultarNfseServicoTomado' => 'ConsultarNfse',
+          'ConsultarNfsePorFaixa' => 'ConsultarNfseFaixa'
         }
       end
 

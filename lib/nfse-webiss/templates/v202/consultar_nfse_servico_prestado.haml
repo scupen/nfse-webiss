@@ -1,0 +1,33 @@
+%Prestador
+  %CpfCnpj
+    %Cnpj= cnpj
+  %InscricaoMunicipal= inscricao_municipal
+
+- if nfse_numero
+  %NumeroNfse= nfse_numero
+
+- haml_tag("Periodo#{tipo.capitalize}") do
+  %DataInicial= data_inicial.is_a?(String) ? data_inicial : data_inicial.strftime('%F')
+  %DataFinal= data_final.is_a?(String) ? data_final : data_final.strftime('%F')
+
+- if tomador_cpf_cnpj
+  %Tomador
+    %CpfCnpj
+      - if tomador_cpf_cnpj.length == 14
+        %Cnpj= tomador_cpf_cnpj
+      - else
+        %Cpf= tomador_cpf_cnpj
+    - if tomador_inscricao_municipal
+      %InscricaoMunicipal= tomador_inscricao_municipal
+
+- if intermediario_cpf_cnpj
+  %Intermediario
+    %CpfCnpj
+      - if intermediario_cpf_cnpj.length == 14
+        %Cnpj= intermediario_cpf_cnpj
+      - else
+        %Cpf= intermediario_cpf_cnpj
+    - if intermediario_inscricao_municipal
+      %InscricaoMunicipal= intermediario_inscricao_municipal
+
+%Pagina= pagina
